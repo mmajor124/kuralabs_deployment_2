@@ -12,6 +12,18 @@ pipeline {
         flask run &
         '''
      }
+      post{
+        success {
+          slackSend channel: 'jenkinsnotif_major',
+                    color: 'good',
+                    message: "The build is successful."
+        }
+        failure  {
+          slackSend channel: 'jenkinsnotif_major',
+                    color: 'warning',
+                    message: "The build was not successful."
+        }
+      }
    }
     stage ('test1') {
       steps {
@@ -32,6 +44,18 @@ pipeline {
        steps {
          sh '/var/lib/jenkins/.local/bin/eb deploy url-shortener-main-dev'
        }
+      post{
+        success {
+          slackSend channel: 'jenkinsnotif_major',
+                    color: 'good',
+                    message: "The application has been successfully deployed."
+        }
+        failure  {
+          slackSend channel: 'jenkinsnotif_major',
+                    color: 'warning',
+                    message: "The application did not deploy successfully"
+        }
+      }
     }
   }
  }
